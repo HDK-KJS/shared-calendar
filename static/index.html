@@ -3,68 +3,82 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Shared Calendar</title>
 <style>
-:root{--bg:#f6efe3;--card:#fffaf0;--ink:#3b2a24;--mute:#8a7566;--line:#e3d6c2;--acc:#6d2332;--win:#f7edc6;--hol:#a4452c}
-@media (prefers-color-scheme:dark){:root{--bg:#1f1814;--card:#2a211b;--ink:#f1e6d6;--mute:#b3a08c;--line:#43362c;--acc:#a8465a;--win:#3d3520;--hol:#e0906f}}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);--bg:#f7f1e4;--card:#fffcf5;--ink:#3f3226;--mute:#8b7b68;--line:#e6dcc7;--acc:#7a5a3c;--hol:#9a6b2f;--dim:rgba(120,100,70,.07)}
+@media (prefers-color-scheme:dark){:root{--bg:#1f1a14;--card:#2a231b;--ink:#f1e8d8;--mute:#b3a48e;--line:#443a2e;--acc:#9b7348;--hol:#d8b06a;--dim:rgba(255,240,210,.05)}
+.c-Travel{background:#5a4a30;color:#f2e4c6;border-color:#c9a46a}.c-Appointment{background:#5a4337;color:#f0dccf;border-color:#b58d77}.c-Visitors{background:#444a30;color:#e4e8cb;border-color:#9ca46c}.c-Holidays{background:#675a24;color:#f8ecb4;border-color:#d2b647}.c-Other{background:#4b443a;color:#e9e1d3;border-color:#aa9e8b}}
 *,*:before,*:after{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.4 Georgia,"Times New Roman",serif}
-main{max-width:1000px;margin:0 auto;padding:16px}
-h1{font-size:24px;margin:0 0 2px;font-weight:600}.sub{color:var(--mute);font-size:13px;margin-bottom:12px;font-family:system-ui,sans-serif}
-.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px;font-family:system-ui,sans-serif}
-button,select,input,textarea{font:inherit;font-family:system-ui,sans-serif;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px 10px}
-button{cursor:pointer}button.on,button.pri{background:var(--acc);color:#fff;border-color:var(--acc)}
-.sp{flex:1}.ttl{font-weight:600;min-width:150px;text-align:center}
-.grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
-.dh{background:var(--card);padding:4px;text-align:center;font:600 12px system-ui;color:var(--mute)}
-.cell{background:var(--card);min-height:92px;padding:3px;cursor:pointer;overflow:hidden}
-.cell.out{opacity:.45}.cell.win{background:var(--win)}.cell.today .n{background:var(--acc);color:#fff}
-.n{display:inline-block;font:12px system-ui;min-width:20px;text-align:center;border-radius:10px;padding:1px 4px}
-.ev{font:11px system-ui;border-radius:4px;padding:1px 4px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#fff;cursor:pointer}
-.hol{font:600 10px system-ui;color:var(--hol)}
-.wk .cell{min-height:260px}
-.row{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px;margin-bottom:8px;cursor:pointer;border-left:6px solid var(--acc)}
-.row b{display:block}.row small{color:var(--mute);font-family:system-ui}
-dialog{border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);width:min(420px,92vw)}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.4 Georgia,"Times New Roman",serif;padding-bottom:96px;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+main{max-width:1000px;margin:0 auto;padding:12px}
+h1{font-size:22px;margin:0 0 2px;font-weight:600}.sub{color:var(--mute);font-size:12px;margin-bottom:10px;font-family:system-ui,sans-serif}
+.bar2{display:flex;gap:6px;align-items:center;margin-bottom:8px;font-family:system-ui,sans-serif}
+button,select,input,textarea{font:inherit;font-family:system-ui,sans-serif;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 12px;min-height:40px}
+button{cursor:pointer}button.on,button.pri{background:var(--acc);color:#fff;border-color:var(--acc)}button:disabled{opacity:.35}
+.ttl{flex:1;font-weight:600;text-align:center}.views button{flex:1}.views{display:flex;gap:6px;margin-bottom:8px;max-width:420px}
+.c-Travel{background:#ecd9b8;color:#573f22;border-color:#c9a46a}.c-Appointment{background:#e6d3c5;color:#5a3b2b;border-color:#b58d77}.c-Visitors{background:#dcdfc3;color:#454b2c;border-color:#9ca46c}.c-Holidays{background:#f6e8ab;color:#68530f;border-color:#d2b647}.c-Other{background:#e4ddd0;color:#4d4436;border-color:#aa9e8b}
+.leg{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;font:12px system-ui}.leg span{padding:2px 10px;border-radius:12px;border-style:solid;border-width:0 0 0 3px}
+.month{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card)}
+.dhs{display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}.dh{padding:5px 0;text-align:center;font:600 11px system-ui;color:var(--mute)}
+.wk{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));min-height:74px;border-top:1px solid var(--line)}
+.bg{border-left:1px solid var(--line);cursor:pointer;z-index:0}.bg:first-child{border-left:0}.bg.out{background:var(--dim)}
+.num{display:flex;flex-direction:column;align-items:flex-start;padding:2px;pointer-events:none;min-width:0;z-index:1}
+.num i{font:600 12px/22px system-ui;font-style:normal;min-width:22px;height:22px;text-align:center;border-radius:11px;padding:0 4px}
+.num.out i{opacity:.4}.num.today i{background:var(--acc);color:#fff}
+.hol{font:600 9px/1.15 system-ui;color:var(--hol);padding-left:2px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;max-width:100%}
+.bar{z-index:2;margin:1px 2px;padding:2px 5px;font:11px/16px system-ui;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;border-style:solid;border-width:0 0 0 3px;border-radius:6px}
+.bar.ce{margin-right:0;border-radius:6px 0 0 6px}.bar.cs{margin-left:0;border-left-width:0;border-radius:0 6px 6px 0}.bar.cs.ce{border-radius:0}
+.wd{display:flex;gap:10px;padding:10px;background:var(--card);border:1px solid var(--line);border-radius:10px;margin-bottom:6px;cursor:pointer}.wd.today{border-color:var(--acc)}
+.wl{width:88px;flex:none;font:13px system-ui}.wc{flex:1;min-width:0}
+.chip{border-style:solid;border-width:0 0 0 3px;border-radius:6px;padding:5px 8px;margin-bottom:4px;font:13px system-ui;cursor:pointer}
+.row{border-style:solid;border-width:0 0 0 4px;border-radius:10px;padding:10px;margin-bottom:8px;cursor:pointer}.row b{display:block}.row small{display:block;opacity:.8;font-family:system-ui}.row div{white-space:pre-wrap}
+#tip{position:fixed;display:none;z-index:50;max-width:260px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font:12px/1.4 system-ui;box-shadow:0 6px 20px rgba(0,0,0,.18);pointer-events:none}
+dialog{border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);width:min(440px,94vw);max-height:92vh;overflow:auto}
 dialog::backdrop{background:rgba(0,0,0,.4)}
 label{display:block;font:12px system-ui;color:var(--mute);margin-top:8px}
-dialog input,dialog select,dialog textarea{width:100%}
-.note{font:12px system-ui;color:var(--mute);margin-top:12px}
-@media(max-width:600px){.cell{min-height:64px}.ev{font-size:10px}}
+dialog input,dialog select,dialog textarea{width:100%;font-size:16px}
+.note{font:12px system-ui;color:var(--mute);margin-top:10px}
+@media(max-width:700px){
+#add{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));width:58px;height:58px;border-radius:50%;padding:0;font-size:30px;line-height:1;box-shadow:0 4px 14px rgba(0,0,0,.3);z-index:20}#add span{display:none}
+dialog{margin:auto 0 0;width:100%;max-width:100%;border-radius:16px 16px 0 0;padding-bottom:calc(16px + env(safe-area-inset-bottom,0px))}}
 </style></head><body><main>
 <h1>Shared Calendar</h1>
-<div class="sub">Tap a day to add something, tap an item to edit it. Red labels are Victorian public holidays. Shaded days are the date range we’re considering. <span id="me"></span> <a id="out" href="/logout" style="color:var(--acc);display:none">Sign out</a></div>
-<div class="bar">
-<button id="prev">‹</button><span class="ttl" id="ttl"></span><button id="next">›</button><button id="today">Today</button>
-<span class="sp"></span>
-<button data-v="month" class="on">Month</button><button data-v="week">Week</button><button data-v="list">List</button>
-<button id="add" class="pri">+ Add</button>
-</div>
-<div style="overflow-x:auto"><div id="view"></div></div>
+<div class="sub">Tap a day to add something and tap an item to open it. On a computer, hover over an item for details. Victorian public holidays are labelled in gold. <span id="me"></span> <a id="out" href="/logout" style="color:var(--acc);display:none">Sign out</a></div>
+<div class="bar2"><button id="prev" aria-label="Previous">‹</button><span class="ttl" id="ttl"></span><button id="next" aria-label="Next">›</button><button id="today">Today</button><button id="add" class="pri" aria-label="Add item">+<span> Add</span></button></div>
+<div class="views"><button data-v="month" class="on">Month</button><button data-v="week">Week</button><button data-v="list">List</button></div>
+<div class="leg" id="leg"></div>
+<div id="view"></div>
 <div class="note" id="status"></div>
+<div id="tip"></div>
 <dialog id="dlg"><div>
 <b id="dt">Add item</b>
 <label>Title<input id="f-title" maxlength="150"></label>
 <label>Start date<input id="f-date" type="date"></label>
 <label>End date (optional, for trips or stays)<input id="f-end" type="date"></label>
-<label>Time (optional)<input id="f-time" type="time"></label>
-<label>Colour<select id="f-color"></select></label>
+<label>Category<select id="f-cat"></select></label>
+<label>Added by<select id="f-by"></select></label>
 <label>Details / notes<textarea id="f-notes" rows="3" maxlength="2000"></textarea></label>
-<div class="note" id="by"></div>
-<div class="bar" style="margin-top:12px"><button id="del" style="display:none">Delete</button><span class="sp"></span><button id="cancel">Cancel</button><button id="save" class="pri">Save</button></div>
+<div class="bar2" style="margin-top:14px"><button id="del" style="display:none">Delete</button><span class="ttl"></span><button id="cancel">Cancel</button><button id="save" class="pri">Save</button></div>
 </div></dialog>
 </main>
 <script>
-const COL={burgundy:"#7a2a3a",chocolate:"#5e4030",caramel:"#8c6636",olive:"#6b7149",terracotta:"#a65a3a",taupe:"#85766a"};
-const NORM={rose:"burgundy",blue:"chocolate",green:"olive",amber:"caramel",purple:"taupe",grey:"taupe"};// older colour names
-// Victorian public holidays (source: business.vic.gov.au). Friday before the AFL Grand Final isn't included: the 2027 date isn't set yet.
-const HOL={"2026-12-25":"Christmas Day","2026-12-26":"Boxing Day","2026-12-28":"Boxing Day (additional)","2027-01-01":"New Year’s Day","2027-01-26":"Australia Day","2027-03-08":"Labour Day","2027-03-26":"Good Friday","2027-03-27":"Easter Saturday","2027-03-28":"Easter Sunday","2027-03-29":"Easter Monday","2027-04-25":"Anzac Day","2027-06-14":"King’s Birthday","2027-11-02":"Melbourne Cup","2027-12-25":"Christmas Day","2027-12-26":"Boxing Day","2027-12-27":"Christmas Day (additional)","2027-12-28":"Boxing Day (additional)"};
-const WIN=["2027-03-13","2027-04-11"];
-let events=[],view="month",cur=new Date(2027,2,1),editId=null;
+const CATS=["Travel","Appointment","Visitors","Holidays","Other"],NAMES=["Kimmy","Hugh","Gwyn"];
+// Victorian public holidays (source: business.vic.gov.au)
+const HOL={"2026-12-25":"Christmas Day","2026-12-26":"Boxing Day","2026-12-28":"Boxing Day (additional)","2027-01-01":"New Year’s Day","2027-01-26":"Australia Day","2027-03-08":"Labour Day","2027-03-26":"Good Friday","2027-03-27":"Easter Saturday","2027-03-28":"Easter Sunday","2027-03-29":"Easter Monday","2027-04-25":"Anzac Day","2027-06-14":"King’s Birthday"};
+const MIN="2026-11-01",MAX="2027-08-31";
+const MN=["January","February","March","April","May","June","July","August","September","October","November","December"],MS=MN.map(m=>m.slice(0,3)),DN=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
 const $=id=>document.getElementById(id);
 const iso=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+const parse=s=>new Date(s+"T00:00:00");
+const addDays=(d,n)=>new Date(d.getFullYear(),d.getMonth(),d.getDate()+n);
+const weekStart=d=>addDays(d,-((d.getDay()+6)%7));
+const clamp=d=>{const s=iso(d);return s<MIN?parse(MIN):s>MAX?parse(MAX):d};
+const fmt=s=>parse(s).toLocaleDateString("en-AU",{weekday:"short",day:"numeric",month:"short"});
 const esc=s=>String(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const cls=e=>"c-"+(CATS.includes(e.cat)?e.cat:"Other");
 const todayIso=iso(new Date());
-const MN=["January","February","March","April","May","June","July","August","September","October","November","December"];
-$("f-color").innerHTML=Object.keys(COL).map(c=>`<option value="${c}">${c[0].toUpperCase()+c.slice(1)}</option>`).join("");
+let events=[],view="month",cur=clamp(new Date()),editId=null;
+$("f-cat").innerHTML=CATS.map(c=>`<option>${c}</option>`).join("");
+$("f-by").innerHTML='<option value="">Choose…</option>'+NAMES.map(n=>`<option>${n}</option>`).join("");
+$("leg").innerHTML=CATS.map(c=>`<span class="c-${c}">${c}</span>`).join("");
 async function api(method,url,body){
   const r=await fetch(url,{method,headers:{"Content-Type":"application/json"},body:body?JSON.stringify(body):undefined});
   if(r.status===401){location="/login";throw 0}
@@ -72,49 +86,72 @@ async function api(method,url,body){
   if(!r.ok)throw new Error(j.error||"Something went wrong");
   return j}
 async function load(){try{events=await api("GET","/api/events");render();$("status").textContent=""}catch(e){if(e)$("status").textContent="Couldn’t load: "+e.message}}
-function evs(d){return events.filter(e=>e.date<=d&&d<=(e.end_date||e.date)).sort((a,b)=>(a.time||"").localeCompare(b.time||""))}
-function chip(e,d){const first=e.date===d;return `<div class="ev" data-id="${e.id}" style="background:${COL[NORM[e.color]||e.color]||COL.burgundy}" title="${esc(e.title)}">${first?esc(e.time):"↳"} ${esc(e.title)}</div>`}
-function cell(d,out){const s=iso(d),w=s>=WIN[0]&&s<=WIN[1];
-return `<div class="cell${out?" out":""}${w?" win":""}${s===todayIso?" today":""}" data-d="${s}"><span class="n">${d.getDate()}</span>${HOL[s]?`<div class="hol">${HOL[s]}</div>`:""}${evs(s).map(e=>chip(e,s)).join("")}</div>`}
+const evs=s=>events.filter(e=>e.date<=s&&s<=(e.end_date||e.date)).sort((a,b)=>a.id-b.id);
+function weekHTML(ws,cm){
+  const days=[...Array(7)].map((_,i)=>iso(addDays(ws,i))),we=days[6];
+  const segs=events.filter(e=>e.date<=we&&(e.end_date||e.date)>=days[0]).map(e=>{const end=e.end_date||e.date;
+    return{ev:e,s:e.date<=days[0]?0:days.indexOf(e.date),e:end>=we?6:days.indexOf(end),cs:e.date<days[0],ce:end>we}})
+    .sort((a,b)=>a.s-b.s||(b.e-b.s)-(a.e-a.s)||a.ev.id-b.ev.id);
+  const lanes=[];segs.forEach(g=>{let l=lanes.findIndex(x=>x<g.s);if(l<0){l=lanes.length;lanes.push(0)}lanes[l]=g.e;g.lane=l});
+  const L=lanes.length;
+  return `<div class="wk" style="grid-template-rows:auto repeat(${L},auto) minmax(6px,1fr)">`
+   +days.map((s,i)=>`<div class="bg${addDays(ws,i).getMonth()!==cm?" out":""}" data-d="${s}" style="grid-column:${i+1};grid-row:1/${L+3}"></div>`).join("")
+   +days.map((s,i)=>{const d=addDays(ws,i);return `<div class="num${d.getMonth()!==cm?" out":""}${s===todayIso?" today":""}" style="grid-column:${i+1};grid-row:1"><i>${d.getDate()===1?MS[d.getMonth()]+" ":""}${d.getDate()}</i>${HOL[s]?`<span class="hol">${HOL[s]}</span>`:""}</div>`}).join("")
+   +segs.map(g=>`<div class="bar ${cls(g.ev)}${g.cs?" cs":""}${g.ce?" ce":""}" data-id="${g.ev.id}" style="grid-column:${g.s+1}/${g.e+2};grid-row:${g.lane+2}">${esc(g.ev.title)}</div>`).join("")+"</div>"}
 function render(){
-document.querySelectorAll("[data-v]").forEach(b=>b.classList.toggle("on",b.dataset.v===view));
-let h="";const heads=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"].map(x=>`<div class="dh">${x}</div>`).join("");
-if(view==="month"){
-$("ttl").textContent=MN[cur.getMonth()]+" "+cur.getFullYear();
-const f=new Date(cur.getFullYear(),cur.getMonth(),1),st=new Date(f);st.setDate(1-((f.getDay()+6)%7));
-h='<div class="grid">'+heads;
-for(let i=0;i<42;i++){const d=new Date(st);d.setDate(st.getDate()+i);if(i>=35&&d.getMonth()!==cur.getMonth())break;h+=cell(d,d.getMonth()!==cur.getMonth())}
-h+="</div>";
-}else if(view==="week"){
-const st=new Date(cur);st.setDate(cur.getDate()-((cur.getDay()+6)%7));const en=new Date(st);en.setDate(st.getDate()+6);
-$("ttl").textContent=st.getDate()+" "+MN[st.getMonth()].slice(0,3)+" – "+en.getDate()+" "+MN[en.getMonth()].slice(0,3)+" "+en.getFullYear();
-h='<div class="grid wk">'+heads;
-for(let i=0;i<7;i++){const d=new Date(st);d.setDate(st.getDate()+i);h+=cell(d,false)}h+="</div>";
-}else{
-$("ttl").textContent="All items";
-h=events.length?events.map(e=>`<div class="row" data-id="${e.id}" style="border-left-color:${COL[NORM[e.color]||e.color]||COL.burgundy}"><b>${esc(e.title)}</b><small>${e.date}${e.end_date?" → "+e.end_date:""} ${esc(e.time)}</small>${e.notes?`<div>${esc(e.notes)}</div>`:""}</div>`).join(""):'<p class="sub">Nothing here yet. Use “+ Add” to start.</p>';
+  $("tip").style.display="none";
+  document.querySelectorAll("[data-v]").forEach(b=>b.classList.toggle("on",b.dataset.v===view));
+  let h="",a,b;
+  if(view==="month"){
+    const y=cur.getFullYear(),m=cur.getMonth(),last=new Date(y,m+1,0);
+    $("ttl").textContent=MN[m]+" "+y;a=new Date(y,m,1);b=last;
+    h='<div class="month"><div class="dhs">'+DN.map(x=>`<div class="dh">${x}</div>`).join("")+"</div>";
+    for(let ws=weekStart(a);ws<=last;ws=addDays(ws,7))h+=weekHTML(ws,m);
+    h+="</div>";
+  }else if(view==="week"){
+    const st=weekStart(cur),en=addDays(st,6);a=st;b=en;
+    $("ttl").textContent=st.getDate()+" "+MS[st.getMonth()]+" – "+en.getDate()+" "+MS[en.getMonth()]+" "+en.getFullYear();
+    h=[...Array(7)].map((_,i)=>{const d=addDays(st,i),s=iso(d);
+      return `<div class="wd${s===todayIso?" today":""}" data-d="${s}"><div class="wl"><b>${DN[i]} ${d.getDate()}</b>${HOL[s]?`<div class="hol">${HOL[s]}</div>`:""}</div><div class="wc">${evs(s).map(e=>`<div class="chip ${cls(e)}" data-id="${e.id}">${e.date===s?"":"↳ "}${esc(e.title)}</div>`).join("")}</div></div>`}).join("");
+  }else{
+    $("ttl").textContent="Coming up";
+    const l=events.filter(e=>(e.end_date||e.date)>=todayIso&&e.date<=MAX).sort((a,b)=>a.date.localeCompare(b.date)||a.id-b.id);
+    h=l.length?l.map(e=>`<div class="row ${cls(e)}" data-id="${e.id}"><b>${esc(e.title)}</b><small>${fmt(e.date)}${e.end_date?" – "+fmt(e.end_date):""} · ${esc(e.cat)}${NAMES.includes(e.created_by)?" · "+e.created_by:""}</small>${e.notes?`<div>${esc(e.notes)}</div>`:""}</div>`).join(""):'<p class="sub">Nothing coming up. Tap + to add something.</p>';
+  }
+  $("view").innerHTML=h;
+  $("prev").disabled=view==="list"||iso(a)<=MIN;$("next").disabled=view==="list"||iso(b)>=MAX;
 }
-$("view").innerHTML=h;}
-function nav(n){if(view==="month")cur=new Date(cur.getFullYear(),cur.getMonth()+n,1);else if(view==="week")cur=new Date(cur.getFullYear(),cur.getMonth(),cur.getDate()+7*n);render()}
+function nav(n){cur=clamp(view==="month"?new Date(cur.getFullYear(),cur.getMonth()+n,1):addDays(cur,7*n));render()}
 $("prev").onclick=()=>nav(-1);$("next").onclick=()=>nav(1);
-$("today").onclick=()=>{cur=new Date();render()};
+$("today").onclick=()=>{cur=clamp(new Date());render()};
 document.querySelectorAll("[data-v]").forEach(b=>b.onclick=()=>{view=b.dataset.v;render()});
-function openDlg(id,date){editId=id;const e=events.find(x=>String(x.id)===String(id))||{};
-$("dt").textContent=id?"Edit item":"Add item";$("f-title").value=e.title||"";$("f-date").value=e.date||date||iso(cur);
-$("f-end").value=e.end_date||"";$("f-time").value=e.time||"";$("f-color").value=NORM[e.color]||e.color||"burgundy";$("f-notes").value=e.notes||"";
-$("by").textContent=e.created_by?"Added by "+e.created_by:"";
-$("del").style.display=id?"":"none";$("dlg").showModal()}
+function openDlg(id,date){editId=id;const e=events.find(x=>String(x.id)===String(id))||{};$("tip").style.display="none";
+  $("dt").textContent=id?"Edit item":"Add item";$("f-title").value=e.title||"";$("f-date").value=e.date||date||iso(cur);
+  $("f-end").value=e.end_date||"";$("f-cat").value=e.cat||"Other";$("f-notes").value=e.notes||"";
+  let last="";try{last=localStorage.getItem("by")||""}catch(_){}
+  $("f-by").value=id?(NAMES.includes(e.created_by)?e.created_by:""):last;$("f-by").disabled=!!id;
+  $("del").style.display=id?"":"none";$("dlg").showModal()}
 $("add").onclick=()=>openDlg(null);
 $("view").onclick=e=>{const ev=e.target.closest("[data-id]");if(ev)return openDlg(ev.dataset.id);const c=e.target.closest("[data-d]");if(c)openDlg(null,c.dataset.d)};
 $("cancel").onclick=()=>$("dlg").close();
-$("save").onclick=async()=>{const t=$("f-title").value.trim(),d=$("f-date").value,en=$("f-end").value;if(!t||!d)return;
-if(en&&en<d){$("status").textContent="End date can’t be before the start date.";return}
-const data={title:t,date:d,end_date:en,time:$("f-time").value,color:$("f-color").value,notes:$("f-notes").value.trim()};
-$("dlg").close();
-try{editId?await api("PUT","/api/events/"+editId,data):await api("POST","/api/events",data);await load()}catch(e){if(e)$("status").textContent="Couldn’t save: "+e.message}};
+$("save").onclick=async()=>{const t=$("f-title").value.trim(),d=$("f-date").value,en=$("f-end").value;if(!t||!d){alert("Add a title and a start date.");return}
+  if(en&&en<d){alert("The end date can’t be before the start date.");return}
+  const data={title:t,date:d,end_date:en,cat:$("f-cat").value,notes:$("f-notes").value.trim()};
+  if(!editId){const by=$("f-by").value;if(!by){alert("Choose who’s adding this.");return}data.created_by=by;try{localStorage.setItem("by",by)}catch(_){}}
+  $("dlg").close();
+  try{editId?await api("PUT","/api/events/"+editId,data):await api("POST","/api/events",data);await load()}catch(e){if(e)$("status").textContent="Couldn’t save: "+e.message}};
 $("del").onclick=async()=>{if(!confirm("Delete this item?"))return;$("dlg").close();
-try{await api("DELETE","/api/events/"+editId);await load()}catch(e){if(e)$("status").textContent="Couldn’t delete: "+e.message}};
-setInterval(()=>{if(!$("dlg").open&&!document.hidden)load()},20000);
+  try{await api("DELETE","/api/events/"+editId);await load()}catch(e){if(e)$("status").textContent="Couldn’t delete: "+e.message}};
+const tip=$("tip");
+function tipHTML(e){return `<b>${esc(e.title)}</b><br>${fmt(e.date)}${e.end_date?" – "+fmt(e.end_date):""}<br>${esc(e.cat)}${NAMES.includes(e.created_by)?" · "+e.created_by:""}${e.notes?`<div style="margin-top:4px;white-space:pre-wrap">${esc(e.notes)}</div>`:""}`}
+function place(x,y){const w=tip.offsetWidth,h=tip.offsetHeight;let l=x+14,t=y+16;if(l+w>innerWidth-8)l=x-w-14;if(t+h>innerHeight-8)t=y-h-14;tip.style.left=Math.max(8,l)+"px";tip.style.top=Math.max(8,t)+"px"}
+if(matchMedia("(hover:hover)").matches){
+  $("view").addEventListener("mouseover",e=>{const b=e.target.closest("[data-id]");if(!b){tip.style.display="none";return}
+    const ev=events.find(x=>String(x.id)===b.dataset.id);if(!ev)return;tip.innerHTML=tipHTML(ev);tip.style.display="block";place(e.clientX,e.clientY)});
+  $("view").addEventListener("mousemove",e=>{if(tip.style.display==="block")place(e.clientX,e.clientY)});
+  $("view").addEventListener("mouseleave",()=>tip.style.display="none");
+}
+setInterval(()=>{if(!$("dlg").open&&!document.hidden&&tip.style.display!=="block")load()},20000);
 api("GET","/api/me").then(m=>{if(m.auth){$("me").textContent="Signed in as "+m.name+".";$("out").style.display=""}}).catch(()=>{});
 render();load();
 </script></body></html>
