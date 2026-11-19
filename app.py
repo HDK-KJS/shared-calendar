@@ -1,5 +1,6 @@
 """Shared calendar: Flask + SQLite. Set SITE_PASSWORD to require a shared password; leave it unset for open access."""
 import hmac
+import json
 import os
 import sqlite3
 import time
@@ -7,7 +8,7 @@ from datetime import date, datetime, timedelta
 from functools import wraps
 from html import escape
 
-from flask import (Flask, abort, g, jsonify, redirect, request, session,
+from flask import (Flask, Response, abort, g, jsonify, redirect, request, session,
                    send_from_directory)
 
 BASE = os.path.dirname(os.path.abspath(__file__))
@@ -198,6 +199,21 @@ def delete_event(eid):
     db().execute("DELETE FROM events WHERE id=?", (eid,))
     db().commit()
     return jsonify(ok=True)
+
+
+@app.route("/assets/manifest.webmanifest")
+def manifest():
+    m = {"name": "Calendar", "short_name": "Calendar", "start_url": "/", "scope": "/",
+         "display": "standalone", "background_color": "#f4eee2", "theme_color": "#f4eee2",
+         "icons": [{"src": "/assets/icon-192.png", "sizes": "192x192", "type": "image/png"},
+                   {"src": "/assets/icon-512.png", "sizes": "512x512", "type": "image/png"},
+                   {"src": "/assets/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}]}
+    return Response(json.dumps(m), mimetype="application/manifest+json")
+
+
+@app.route("/assets/<path:name>")
+def assets(name):
+    return send_from_directory(os.path.join(BASE, "static", "assets"), name)
 
 
 if __name__ == "__main__":
