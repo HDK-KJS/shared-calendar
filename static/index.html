@@ -18,18 +18,18 @@ body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.4 Inter,system-u
 main{max-width:520px;margin:0 auto;padding:18px 18px 8px;display:flex;flex-direction:column;gap:14px}
 button,select,input,textarea{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 12px;min-height:44px}
 button{cursor:pointer;border:0}button:disabled{opacity:.3}
-.hd{display:flex;align-items:center;gap:8px}.mo{flex:1;min-width:0;font-size:28px;line-height:1.1;font-weight:700;letter-spacing:-.02em;white-space:nowrap}.mo span{font-weight:400;color:var(--mute)}
-.rb{width:44px;height:44px;border-radius:50%;padding:0;background:var(--card);font-size:20px}.hd .rb{width:40px;height:40px}.hd .tdy{height:36px;border-radius:18px;padding:0 14px;font:600 13px Inter,system-ui;background:var(--seg)}
+.hd{display:flex;align-items:center;gap:6px}.mo{flex:1;min-width:0;font-size:clamp(22px,7vw,28px);line-height:1.1;font-weight:700;letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mo span{font-size:17px;font-weight:500;color:var(--mute);margin-left:2px}.mo.sm{font-size:clamp(16px,5vw,20px)}
+.rb{width:44px;height:44px;border-radius:50%;padding:0;background:var(--card);font-size:20px}.hd .rb{width:36px;height:36px;font-size:18px}.hd .tdy{height:34px;border-radius:17px;padding:0 11px;font:600 12px Inter,system-ui;background:var(--seg)}
 .sg{display:flex;background:var(--seg);border-radius:14px;padding:4px;gap:4px}.sg button{flex:1;height:40px;min-height:0;border-radius:11px;background:transparent;color:var(--mute);font:600 14px Inter,system-ui;padding:0}.sg .on{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.15)}
 .cd{background:var(--card);border-radius:24px;padding:12px 10px 8px}
 .wd,.wk{display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}.wd div{text-align:center;font:600 11px Inter,system-ui;color:var(--mute);padding:4px 0 8px}
-.d{grid-row:1;display:flex;flex-direction:column;align-items:center;gap:2px;height:44px;cursor:pointer}
+.d{grid-row:1;display:flex;flex-direction:column;align-items:center;gap:0;height:38px;cursor:pointer}
 .d em{font-style:normal;width:32px;height:32px;line-height:32px;border-radius:12px;text-align:center;font-weight:500;font-size:14px}
-.d.t em{background:var(--acc);color:var(--ai)}.d.s em{box-shadow:inset 0 0 0 2px var(--acc)}.d.h em{color:var(--hol);font-weight:700}.d.o{opacity:.4}
+.d.t em{background:var(--acc);color:var(--ai)}.d.s em{box-shadow:inset 0 0 0 2px var(--acc)}.d.h em{color:var(--hol);font-weight:700}.d.o em{opacity:.4}
 .dts{display:flex;gap:3px;height:5px}.dts s{width:5px;height:5px;border-radius:50%}
-.br{display:block;height:8px;border-radius:4px;margin:0 3px 3px;cursor:pointer}.br.ce{margin-right:0;border-radius:4px 0 0 4px}.br.cs{margin-left:0;border-radius:0 4px 4px 0}.br.cs.ce{border-radius:0}
+.br{display:block;height:18px;line-height:18px;font-size:10.5px;font-weight:600;padding:0 5px;margin:0 2px 2px;border-radius:6px;border-left:3px solid var(--c);background:var(--t);color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}.br.ce{margin-right:0;border-radius:6px 0 0 6px}.br.cs{margin-left:0;border-left:0;border-radius:0 6px 6px 0}.br.cs.ce{border-radius:0}
 .k1{--c:var(--c1);--t:var(--t1)}.k2{--c:var(--c2);--t:var(--t2)}.k3{--c:var(--c3);--t:var(--t3)}.k4{--c:var(--c4);--t:var(--t4)}.k5{--c:var(--c5);--t:var(--t5)}
-.br,.dts s,.ld{background:var(--c)}
+.ld{background:var(--c)}
 .lg{display:flex;justify-content:space-between;font:500 11px Inter,system-ui;color:var(--mute);padding:0 2px;white-space:nowrap}.lg .ld{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px}
 .sh{display:flex;align-items:center}.sh>div{flex:1}.sh b{display:block;font-size:18px}.sh small{color:var(--mute);font-size:12px}.pl{background:var(--acc);color:var(--ai);font-size:24px}
 .ev{display:flex;align-items:center;gap:12px;border-radius:20px;padding:14px 16px;min-height:64px;background:var(--t);cursor:pointer}.ev .ld{width:10px;height:10px;border-radius:50%;flex:none}
@@ -46,6 +46,7 @@ label{display:block;font:500 12px Inter,system-ui;color:var(--mute);margin-top:1
 .fb{display:flex;gap:8px;margin-top:16px}.fb .sp{flex:1}.bt{height:44px;padding:0 18px;border-radius:12px;background:var(--seg);font:600 14px Inter,system-ui}.bt.pri{background:var(--acc);color:var(--ai)}
 .pvh{display:flex;gap:6px;align-items:flex-start}.pvt{flex:1;font-size:20px;font-weight:700;padding-top:8px}.pvc{display:inline-block;font:600 12px Inter,system-ui;padding:3px 12px;border-radius:12px;margin-top:6px;background:var(--t)}
 .pvb{font-size:14px;line-height:1.5;margin-top:10px}.pvb p{margin:6px 0}.pvn{white-space:pre-wrap;margin-top:10px}.note{font-size:12px;color:var(--mute)}
+@media(max-width:340px){.mo span{display:none}}
 @media(max-width:700px){dialog{margin:auto 0 0;width:100%;max-width:100%;border-radius:22px 22px 0 0;padding-bottom:calc(18px + env(safe-area-inset-bottom,0px))}}
 </style></head><body><main>
 <div class="hd"><div class="mo" id="ttl"></div><button class="tdy" id="today">Today</button><button class="rb" id="prev" aria-label="Previous">‹</button><button class="rb" id="next" aria-label="Next">›</button></div>
@@ -99,14 +100,15 @@ const head=(t,sub,d)=>`<div class="sh"><div><b>${t}</b><small>${sub}</small></di
 const count=n=>n?n+(n===1?" item":" items"):"Nothing yet";
 function weekHTML(ws,cm){
   const days=[...Array(7)].map((_,i)=>iso(addDays(ws,i))),we=days[6];
-  const segs=events.filter(e=>e.end_date&&e.date<=we&&e.end_date>=days[0]).map(e=>({ev:e,s:e.date<=days[0]?0:days.indexOf(e.date),e:e.end_date>=we?6:days.indexOf(e.end_date),cs:e.date<days[0],ce:e.end_date>we}))
+  const segs=events.filter(e=>e.date<=we&&(e.end_date||e.date)>=days[0]).map(e=>{const end=e.end_date||e.date;return{ev:e,s:e.date<=days[0]?0:days.indexOf(e.date),e:end>=we?6:days.indexOf(end),cs:e.date<days[0],ce:end>we}})
     .sort((a,b)=>a.s-b.s||(b.e-b.s)-(a.e-a.s)||a.ev.id-b.ev.id);
   const lanes=[];segs.forEach(g=>{let l=lanes.findIndex(x=>x<g.s);if(l<0){l=lanes.length;lanes.push(0)}lanes[l]=g.e;g.lane=l});
-  return `<div class="wk" style="grid-template-rows:44px repeat(${lanes.length},11px)">`
-   +days.map((s,i)=>{const d=addDays(ws,i);const dots=events.filter(e=>!e.end_date&&e.date===s).slice(0,3).map(e=>`<s class="${kc(e)}"></s>`).join("");
-     return `<div class="d${d.getMonth()!==cm?" o":""}${s===todayIso?" t":""}${s===sel?" s":""}${HOL[s]?" h":""}" data-d="${s}" style="grid-column:${i+1}"><em>${d.getDate()}</em><span class="dts">${dots}</span></div>`}).join("")
-   +segs.map(g=>`<u class="br ${kc(g.ev)}${g.cs?" cs":""}${g.ce?" ce":""}" data-id="${g.ev.id}" style="grid-column:${g.s+1}/${g.e+2};grid-row:${g.lane+2}"></u>`).join("")+"</div>"}
+  return `<div class="wk" style="grid-template-rows:38px repeat(${lanes.length},20px)">`
+   +days.map((s,i)=>{const d=addDays(ws,i);
+     return `<div class="d${d.getMonth()!==cm?" o":""}${s===todayIso?" t":""}${HOL[s]?" h":""}" data-d="${s}" style="grid-column:${i+1}"><em>${d.getDate()}</em></div>`}).join("")
+   +segs.map(g=>`<div class="br ${kc(g.ev)}${g.cs?" cs":""}${g.ce?" ce":""}" data-id="${g.ev.id}" style="grid-column:${g.s+1}/${g.e+2};grid-row:${g.lane+2}">${esc(g.ev.title)}</div>`).join("")+"</div>"}
 function render(){
+  $("ttl").className="mo"+(view==="week"?" sm":"");
   $("tip").style.display="none";
   document.querySelectorAll("[data-v]").forEach(b=>b.classList.toggle("on",b.dataset.v===view));
   let h="",a,b;
@@ -117,12 +119,14 @@ function render(){
     h='<div class="cd"><div class="wd">'+DN.map(x=>`<div>${x}</div>`).join("")+"</div>";
     for(let ws=weekStart(a);ws<=last;ws=addDays(ws,7))h+=weekHTML(ws,m);
     h+='</div><div class="lg">'+CATS.map((c,i)=>`<span class="k${i+1}"><i class="ld"></i>${c}</span>`).join("")+"</div>";
-    const l=evs(sel);
-    h+=head(parse(sel).toLocaleDateString("en-AU",{weekday:"long",day:"numeric",month:"long"}),(HOL[sel]?HOL[sel]+" · ":"")+count(l.length),sel);
-    h+='<div class="stack">'+(HOL[sel]?`<div class="ev" style="background:var(--seg);cursor:default"><i class="ld" style="background:var(--hol)"></i><div class="et"><b>${HOL[sel]}</b><small>Victorian public holiday</small></div></div>`:"")+l.map(card).join("")+(!l.length&&!HOL[sel]?'<p class="em">Nothing on this day. Tap + to add something.</p>':"")+"</div>";
+    const ms=iso(a),me=iso(b);
+    const mi=events.filter(e=>e.date<=me&&(e.end_date||e.date)>=ms).map(e=>({k:e.date<ms?ms:e.date,e}));
+    const all=[...mi,...Object.keys(HOL).filter(d=>d>=ms&&d<=me).map(d=>({k:d,h:HOL[d]}))].sort((x,y)=>x.k.localeCompare(y.k)||(!!y.h-!!x.h)||((x.e?x.e.id:0)-(y.e?y.e.id:0)));
+    h+=head(MN[m]+" items",count(mi.length),todayIso>=ms&&todayIso<=me?todayIso:ms);
+    h+='<div class="stack">'+all.map(x=>x.e?card(x.e):`<div class="ev" style="background:var(--seg);cursor:default"><i class="ld" style="background:var(--hol)"></i><div class="et"><b>${x.h}</b><small>${fmt(x.k)} · Public holiday</small></div></div>`).join("")+(!mi.length?'<p class="em">Nothing this month yet. Tap + to add something.</p>':"")+"</div>";
   }else if(view==="week"){
     const st=weekStart(cur),en=addDays(st,6);a=st;b=en;
-    $("ttl").innerHTML=st.getDate()+" "+MS[st.getMonth()]+" – "+en.getDate()+" "+MS[en.getMonth()]+" <span>"+en.getFullYear()+"</span>";
+    $("ttl").textContent=st.getDate()+" "+MS[st.getMonth()]+" – "+en.getDate()+" "+MS[en.getMonth()];
     h='<div class="stack">'+[...Array(7)].map((_,i)=>{const d=addDays(st,i),s=iso(d),l=evs(s);
       return `<div class="wr${s===todayIso?" tn":""}" data-add="${s}"><div class="wl">${DN[i]}<span>${d.getDate()}</span>${HOL[s]?`<small>${HOL[s]}</small>`:""}</div><div class="wc">${l.map(card).join("")}</div></div>`}).join("")+"</div>";
   }else{
@@ -153,7 +157,7 @@ $("pv").addEventListener("click",e=>{if(e.target===$("pv"))$("pv").close()});
 $("view").onclick=e=>{
   const ev=e.target.closest("[data-id]");if(ev)return openPv(ev.dataset.id);
   const a=e.target.closest("[data-add]");if(a)return openDlg(null,a.dataset.add);
-  const c=e.target.closest("[data-d]");if(c&&view==="month"){const s=c.dataset.d;if(s<MIN||s>MAX)return;sel=s;const d=parse(s);if(d.getMonth()!==cur.getMonth())cur=new Date(d.getFullYear(),d.getMonth(),1);render()}};
+  const c=e.target.closest("[data-d]");if(c&&view==="month")openDlg(null,c.dataset.d)};
 $("cancel").onclick=()=>$("dlg").close();
 $("save").onclick=async()=>{const t=$("f-title").value.trim(),d=$("f-date").value,en=$("f-end").value;if(!t||!d){alert("Add a title and a start date.");return}
   if(en&&en<d){alert("The end date can’t be before the start date.");return}
