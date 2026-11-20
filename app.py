@@ -132,7 +132,10 @@ def clean(data):
     title = str(data.get("title", "")).strip()[:150]
     d = str(data.get("date", "")).strip()
     end = str(data.get("end_date", "")).strip()
+    t = str(data.get("time", "")).strip()
     try:
+        if t:
+            datetime.strptime(t, "%H:%M")
         date.fromisoformat(d)
         if end and date.fromisoformat(end) < date.fromisoformat(d):
             return None
@@ -143,7 +146,7 @@ def clean(data):
     if end == d:
         end = ""
     cat = data.get("cat") if data.get("cat") in CATS else "Other"
-    return (title, d, end, cat, str(data.get("notes", "")).strip()[:2000])
+    return (title, d, end, t, cat, str(data.get("notes", "")).strip()[:2000])
 
 
 def row_dict(r):
@@ -174,7 +177,7 @@ def create_event():
     if by not in NAMES:
         return jsonify(error="Choose who is adding this"), 400
     cur = db().execute(
-        "INSERT INTO events (title,date,end_date,cat,notes,created_by,updated_at) VALUES (?,?,?,?,?,?,?)",
+        "INSERT INTO events (title,date,end_date,time,cat,notes,created_by,updated_at) VALUES (?,?,?,?,?,?,?,?)",
         v + (by, datetime.utcnow().isoformat()))
     db().commit()
     return jsonify(id=cur.lastrowid), 201
@@ -183,11 +186,14 @@ def create_event():
 @app.put("/api/events/<int:eid>")
 @login_required
 def update_event(eid):
-    v = clean(request.get_json(silent=True))
+    data = request.get_json(silent=True)
+    v = clean(data)
     if not v:
         return jsonify(error="Title and a valid date are required"), 400
+    if data.get("created_by") in NAMES:
+        db().execute("UPDATE events SET created_by=? WHERE id=?", (data["created_by"], eid))
     cur = db().execute(
-        "UPDATE events SET title=?,date=?,end_date=?,cat=?,notes=?,updated_at=? WHERE id=?",
+        "UPDATE events SET title=?,date=?,end_date=?,time=?,cat=?,notes=?,updated_at=? WHERE id=?",
         v + (datetime.utcnow().isoformat(), eid))
     db().commit()
     return (jsonify(ok=True) if cur.rowcount else (jsonify(error="Not found"), 404))

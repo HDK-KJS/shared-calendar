@@ -34,6 +34,7 @@ button{cursor:pointer;border:0}button:disabled{opacity:.3}
 .sh{display:flex;align-items:center}.sh>div{flex:1}.sh b{display:block;font-size:18px}.sh small{color:var(--mute);font-size:12px}.pl{background:var(--acc);color:var(--ai);font-size:24px}
 .ev{display:flex;align-items:center;gap:12px;border-radius:20px;padding:14px 16px;min-height:64px;background:var(--t);cursor:pointer}.ev .ld{width:10px;height:10px;border-radius:50%;flex:none}
 .et{flex:1;min-width:0}.et b{display:block;font-size:15px}.et small{font-size:12px;opacity:.75}.tg{font:600 11px Inter,system-ui;opacity:.75}
+.gl{font:600 12px Inter,system-ui;color:var(--mute);margin:4px 0 -2px}.tr{display:flex;gap:10px;align-items:stretch}.tt{width:60px;flex:none;font:600 12px Inter,system-ui;color:var(--mute);padding-top:22px}.tr .ev{flex:1;min-width:0}
 .stack{display:flex;flex-direction:column;gap:10px}.em{color:var(--mute);margin:4px 0;font-size:14px}
 .wr{display:flex;gap:12px;background:var(--card);border-radius:20px;padding:10px}.wr.tn{box-shadow:inset 0 0 0 2px var(--acc)}.wl{width:48px;flex:none;text-align:center;font:600 12px Inter,system-ui;color:var(--mute)}.wl span{display:block;font-size:20px;color:var(--ink)}.wl small{display:block;color:var(--hol);font-size:9px;line-height:1.1}.wc{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px;justify-content:center}.wc .ev{min-height:48px;padding:8px 12px;border-radius:14px}
 @keyframes inr{from{opacity:.2;transform:translateX(28px)}to{opacity:1;transform:none}}@keyframes inl{from{opacity:.2;transform:translateX(-28px)}to{opacity:1;transform:none}}
@@ -50,7 +51,7 @@ label{display:block;font:500 12px Inter,system-ui;color:var(--mute);margin-top:1
 @media(max-width:700px){dialog{margin:auto 0 0;width:100%;max-width:100%;border-radius:22px 22px 0 0;padding-bottom:calc(18px + env(safe-area-inset-bottom,0px))}}
 </style></head><body><main>
 <div class="hd"><div class="mo" id="ttl"></div><button class="tdy" id="today">Today</button><button class="rb" id="prev" aria-label="Previous">‹</button><button class="rb" id="next" aria-label="Next">›</button></div>
-<div class="sg"><button data-v="month" class="on">Month</button><button data-v="week">Week</button><button data-v="list">List</button></div>
+<div class="sg"><button data-v="month" class="on">Month</button><button data-v="week">Week</button><button data-v="day">Day</button><button data-v="list">List</button></div>
 <div id="view"></div>
 <div class="note" id="status"></div>
 <div id="tip"></div>
@@ -60,6 +61,7 @@ label{display:block;font:500 12px Inter,system-ui;color:var(--mute);margin-top:1
 <label>Title<input id="f-title" maxlength="150"></label>
 <label>Start date<input id="f-date" type="date"></label>
 <label>End date (optional, for trips or stays)<input id="f-end" type="date"></label>
+<label>Time (optional)<input id="f-time" type="time"></label>
 <label>Category<select id="f-cat"></select></label>
 <label>Added by<select id="f-by"></select></label>
 <label>Details / notes<textarea id="f-notes" rows="3" maxlength="2000"></textarea></label>
@@ -83,7 +85,7 @@ const full=s=>parse(s).toLocaleDateString("en-AU",{weekday:"short",day:"numeric"
 const esc=s=>String(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const kc=e=>"k"+(CATS.indexOf(e.cat)+1||6);
 const todayIso=iso(new Date());
-let events=[],view="month",cur=clamp(new Date()),sel=iso(cur),editId=null,anim="",pvId=null;
+let events=[],view="month",cur=clamp(new Date()),sel=iso(cur),editId=null,anim="",pvId=null,dayD=cur;
 $("f-cat").innerHTML=CATS.map(c=>`<option>${c}</option>`).join("");
 $("f-by").innerHTML='<option value="">Choose…</option>'+NAMES.map(n=>`<option>${n}</option>`).join("");
 async function api(method,url,body){
@@ -93,9 +95,10 @@ async function api(method,url,body){
   if(!r.ok)throw new Error(j.error||"Something went wrong");
   return j}
 async function load(){try{events=await api("GET","/api/events");render();$("status").textContent=""}catch(e){if(e)$("status").textContent="Couldn’t load: "+e.message}}
-const evs=s=>events.filter(e=>e.date<=s&&s<=(e.end_date||e.date)).sort((a,b)=>a.id-b.id);
+const tm=t=>{const[h,m]=t.split(":");return new Date(2000,0,1,+h,+m).toLocaleTimeString("en-AU",{hour:"numeric",minute:"2-digit"})};
+const evs=s=>events.filter(e=>e.date<=s&&s<=(e.end_date||e.date)).sort((a,b)=>(a.time||"").localeCompare(b.time||"")||a.id-b.id);
 const range=e=>fmt(e.date)+(e.end_date?" – "+fmt(e.end_date):"");
-const card=e=>`<div class="ev ${kc(e)}" data-id="${e.id}"><i class="ld"></i><div class="et"><b>${esc(e.title)}</b><small>${range(e)}${NAMES.includes(e.created_by)?" · "+e.created_by:""}</small></div><span class="tg">${esc(e.cat)}</span></div>`;
+const card=(e,nt)=>`<div class="ev ${kc(e)}" data-id="${e.id}"><i class="ld"></i><div class="et"><b>${esc(e.title)}</b><small>${!nt&&e.time?tm(e.time)+" · ":""}${range(e)}${NAMES.includes(e.created_by)?" · "+e.created_by:""}</small></div><span class="tg">${esc(e.cat)}</span></div>`;
 const head=(t,sub,d)=>`<div class="sh"><div><b>${t}</b><small>${sub}</small></div><button class="rb pl" data-add="${d}" aria-label="Add item">+</button></div>`;
 const count=n=>n?n+(n===1?" item":" items"):"Nothing yet";
 function weekHTML(ws,cm){
@@ -121,48 +124,56 @@ function render(){
     h+='</div><div class="lg">'+CATS.map((c,i)=>`<span class="k${i+1}"><i class="ld"></i>${c}</span>`).join("")+"</div>";
     const ms=iso(a),me=iso(b);
     const mi=events.filter(e=>e.date<=me&&(e.end_date||e.date)>=ms).map(e=>({k:e.date<ms?ms:e.date,e}));
-    const all=[...mi,...Object.keys(HOL).filter(d=>d>=ms&&d<=me).map(d=>({k:d,h:HOL[d]}))].sort((x,y)=>x.k.localeCompare(y.k)||(!!y.h-!!x.h)||((x.e?x.e.id:0)-(y.e?y.e.id:0)));
+    const all=[...mi,...Object.keys(HOL).filter(d=>d>=ms&&d<=me).map(d=>({k:d,h:HOL[d]}))].sort((x,y)=>x.k.localeCompare(y.k)||(!!y.h-!!x.h)||((x.e&&y.e)?(x.e.time||"").localeCompare(y.e.time||""):0)||((x.e?x.e.id:0)-(y.e?y.e.id:0)));
     h+=head(MN[m]+" items",count(mi.length),todayIso>=ms&&todayIso<=me?todayIso:ms);
     h+='<div class="stack">'+all.map(x=>x.e?card(x.e):`<div class="ev" style="background:var(--seg);cursor:default"><i class="ld" style="background:var(--hol)"></i><div class="et"><b>${x.h}</b><small>${fmt(x.k)} · Public holiday</small></div></div>`).join("")+(!mi.length?'<p class="em">Nothing this month yet. Tap + to add something.</p>':"")+"</div>";
   }else if(view==="week"){
     const st=weekStart(cur),en=addDays(st,6);a=st;b=en;
     $("ttl").textContent=st.getDate()+" "+MS[st.getMonth()]+" – "+en.getDate()+" "+MS[en.getMonth()];
     h='<div class="stack">'+[...Array(7)].map((_,i)=>{const d=addDays(st,i),s=iso(d),l=evs(s);
-      return `<div class="wr${s===todayIso?" tn":""}" data-add="${s}"><div class="wl">${DN[i]}<span>${d.getDate()}</span>${HOL[s]?`<small>${HOL[s]}</small>`:""}</div><div class="wc">${l.map(card).join("")}</div></div>`}).join("")+"</div>";
+      return `<div class="wr${s===todayIso?" tn":""}" data-add="${s}"><div class="wl" data-day="${s}">${DN[i]}<span>${d.getDate()}</span>${HOL[s]?`<small>${HOL[s]}</small>`:""}</div><div class="wc">${l.map(e=>card(e)).join("")}</div></div>`}).join("")+"</div>";
+  }else if(view==="day"){
+    const s=iso(dayD);a=b=dayD;
+    $("ttl").innerHTML=dayD.toLocaleDateString("en-AU",{weekday:"short",day:"numeric",month:"short"})+" <span>"+dayD.getFullYear()+"</span>";
+    const l=evs(s),tOf=e=>e.date===s?e.time:"";
+    const ad=l.filter(e=>!tOf(e)),td=l.filter(e=>tOf(e)).sort((x,y)=>x.time.localeCompare(y.time)||x.id-y.id);
+    h=head(dayD.toLocaleDateString("en-AU",{weekday:"long",day:"numeric",month:"long"}),(HOL[s]?HOL[s]+" · ":"")+count(l.length),s);
+    h+='<div class="stack">'+(HOL[s]?`<div class="ev" style="background:var(--seg);cursor:default"><i class="ld" style="background:var(--hol)"></i><div class="et"><b>${HOL[s]}</b><small>Victorian public holiday</small></div></div>`:"")+(ad.length?'<div class="gl">All day</div>'+ad.map(e=>card(e,1)).join(""):"")+td.map(e=>`<div class="tr"><div class="tt">${tm(e.time)}</div>${card(e,1)}</div>`).join("")+(!l.length&&!HOL[s]?'<p class="em">Nothing on this day. Tap + to add something.</p>':"")+"</div>";
   }else{
     $("ttl").textContent="Coming up";
-    const l=events.filter(e=>(e.end_date||e.date)>=todayIso&&e.date<=MAX).sort((x,y)=>x.date.localeCompare(y.date)||x.id-y.id);
-    h=head("Upcoming",count(l.length),todayIso)+'<div class="stack">'+l.map(card).join("")+"</div>";
+    const l=events.filter(e=>(e.end_date||e.date)>=todayIso&&e.date<=MAX).sort((x,y)=>x.date.localeCompare(y.date)||(x.time||"").localeCompare(y.time||"")||x.id-y.id);
+    h=head("Upcoming",count(l.length),todayIso)+'<div class="stack">'+l.map(e=>card(e)).join("")+"</div>";
   }
   $("view").innerHTML=h;$("view").className=anim;anim="";
   $("prev").disabled=view==="list"||iso(a)<=MIN;$("next").disabled=view==="list"||iso(b)>=MAX;
 }
-function nav(n){anim=n>0?"in-r":"in-l";cur=clamp(view==="month"?new Date(cur.getFullYear(),cur.getMonth()+n,1):addDays(cur,7*n));if(view==="month"){const t=new Date();sel=(cur.getMonth()===t.getMonth()&&cur.getFullYear()===t.getFullYear())?todayIso:iso(cur)}render()}
+function nav(n){anim=n>0?"in-r":"in-l";if(view==="day"){dayD=clamp(addDays(dayD,n));render();return}cur=clamp(view==="month"?new Date(cur.getFullYear(),cur.getMonth()+n,1):addDays(cur,7*n));if(view==="month"){const t=new Date();sel=(cur.getMonth()===t.getMonth()&&cur.getFullYear()===t.getFullYear())?todayIso:iso(cur)}render()}
 $("prev").onclick=()=>nav(-1);$("next").onclick=()=>nav(1);
-$("today").onclick=()=>{cur=clamp(new Date());sel=iso(cur);render()};
+$("today").onclick=()=>{cur=clamp(new Date());sel=iso(cur);dayD=cur;render()};
 document.querySelectorAll("[data-v]").forEach(b=>b.onclick=()=>{view=b.dataset.v;render()});
 function openDlg(id,date){editId=id;const e=events.find(x=>String(x.id)===String(id))||{};$("tip").style.display="none";
   $("dt").textContent=id?"Edit item":"Add item";$("f-title").value=e.title||"";$("f-date").value=e.date||date||sel;
-  $("f-end").value=e.end_date||"";$("f-cat").value=e.cat||"Other";$("f-notes").value=e.notes||"";
+  $("f-end").value=e.end_date||"";$("f-time").value=e.time||"";$("f-cat").value=e.cat||"Other";$("f-notes").value=e.notes||"";
   let last="";try{last=localStorage.getItem("by")||""}catch(_){}
-  $("f-by").value=id?(NAMES.includes(e.created_by)?e.created_by:""):last;$("f-by").disabled=!!id;
+  $("f-by").value=id?(NAMES.includes(e.created_by)?e.created_by:""):last;
   $("del").style.display=id?"":"none";$("dlg").showModal()}
 function openPv(id){const e=events.find(x=>String(x.id)===String(id));if(!e)return;pvId=id;$("tip").style.display="none";
   $("pv-t").textContent=e.title;$("pv-c").textContent=e.cat;$("pv-c").className="pvc "+kc(e);
-  $("pv-b").innerHTML=`<p>${full(e.date)}${e.end_date?" – "+full(e.end_date):""}</p>${NAMES.includes(e.created_by)?`<p>Added by ${e.created_by}</p>`:""}${e.notes?`<div class="pvn">${esc(e.notes)}</div>`:""}`;
+  $("pv-b").innerHTML=`<p>${full(e.date)}${e.time?" · "+tm(e.time):""}${e.end_date?" – "+full(e.end_date):""}</p>${NAMES.includes(e.created_by)?`<p>Added by ${e.created_by}</p>`:""}${e.notes?`<div class="pvn">${esc(e.notes)}</div>`:""}`;
   $("pv").showModal()}
 $("pv-x").onclick=()=>$("pv").close();
 $("pv-edit").onclick=()=>{$("pv").close();openDlg(pvId)};
 $("pv").addEventListener("click",e=>{if(e.target===$("pv"))$("pv").close()});
 $("view").onclick=e=>{
   const ev=e.target.closest("[data-id]");if(ev)return openPv(ev.dataset.id);
+  const dd=e.target.closest("[data-day]");if(dd){dayD=clamp(parse(dd.dataset.day));view="day";return render()}
   const a=e.target.closest("[data-add]");if(a)return openDlg(null,a.dataset.add);
   const c=e.target.closest("[data-d]");if(c&&view==="month")openDlg(null,c.dataset.d)};
 $("cancel").onclick=()=>$("dlg").close();
 $("save").onclick=async()=>{const t=$("f-title").value.trim(),d=$("f-date").value,en=$("f-end").value;if(!t||!d){alert("Add a title and a start date.");return}
   if(en&&en<d){alert("The end date can’t be before the start date.");return}
-  const data={title:t,date:d,end_date:en,cat:$("f-cat").value,notes:$("f-notes").value.trim()};
-  if(!editId){const by=$("f-by").value;if(!by){alert("Choose who’s adding this.");return}data.created_by=by;try{localStorage.setItem("by",by)}catch(_){}}
+  const data={title:t,date:d,end_date:en,time:$("f-time").value,cat:$("f-cat").value,notes:$("f-notes").value.trim()};
+  const by=$("f-by").value;if(by)data.created_by=by;if(!editId){if(!by){alert("Choose who’s adding this.");return}try{localStorage.setItem("by",by)}catch(_){}}
   $("dlg").close();
   try{editId?await api("PUT","/api/events/"+editId,data):await api("POST","/api/events",data);await load()}catch(e){if(e)$("status").textContent="Couldn’t save: "+e.message}};
 $("del").onclick=async()=>{if(!confirm("Delete this item?"))return;$("dlg").close();
@@ -171,7 +182,7 @@ let tx=0,ty=0;
 $("view").addEventListener("touchstart",e=>{const t=e.touches[0];tx=t.clientX;ty=t.clientY},{passive:true});
 $("view").addEventListener("touchend",e=>{if(view==="list")return;const t=e.changedTouches[0],dx=t.clientX-tx,dy=t.clientY-ty;if(Math.abs(dx)>60&&Math.abs(dx)>1.5*Math.abs(dy))nav(dx<0?1:-1)},{passive:true});
 const tip=$("tip");
-function tipHTML(e){return `<b>${esc(e.title)}</b><br>${range(e)}<br>${esc(e.cat)}${NAMES.includes(e.created_by)?" · "+e.created_by:""}${e.notes?`<div style="margin-top:4px;white-space:pre-wrap">${esc(e.notes)}</div>`:""}`}
+function tipHTML(e){return `<b>${esc(e.title)}</b><br>${e.time?tm(e.time)+" · ":""}${range(e)}<br>${esc(e.cat)}${NAMES.includes(e.created_by)?" · "+e.created_by:""}${e.notes?`<div style="margin-top:4px;white-space:pre-wrap">${esc(e.notes)}</div>`:""}`}
 function place(x,y){const w=tip.offsetWidth,h=tip.offsetHeight;let l=x+14,t=y+16;if(l+w>innerWidth-8)l=x-w-14;if(t+h>innerHeight-8)t=y-h-14;tip.style.left=Math.max(8,l)+"px";tip.style.top=Math.max(8,t)+"px"}
 if(matchMedia("(hover:hover)").matches){
   $("view").addEventListener("mouseover",e=>{const b=e.target.closest(".br,.mg");if(!b){tip.style.display="none";return}
