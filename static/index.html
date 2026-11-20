@@ -11,8 +11,8 @@
 <meta name="apple-mobile-web-app-title" content="Calendar">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);--bg:#f4eee2;--card:#fbf8f1;--ink:#2f2a24;--mute:#70665a;--seg:#e8dfcf;--line:#e6dccb;--acc:#5a4a3a;--ai:#fbf8f1;--hol:#9c4a22;--c1:#5f7f94;--c2:#b5654a;--c3:#7b8a5a;--c4:#d1a03c;--c5:#a39887;--t1:#dde6e8;--t2:#f0dcd2;--t3:#e3e7d2;--t4:#f3e6c4;--t5:#e9e3d8}
-@media (prefers-color-scheme:dark){:root{--bg:#1c1814;--card:#26211b;--ink:#f0e8da;--mute:#a99d8c;--seg:#2f2921;--line:#352f26;--acc:#e8dcc6;--ai:#1c1814;--hol:#e0a070;--c1:#8fb0c4;--c2:#d98b6a;--c3:#a5b57e;--c4:#e3b85a;--c5:#b3a897;--t1:#233039;--t2:#3a2a22;--t3:#2c3322;--t4:#3b3119;--t5:#2f2a23}}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);--bg:#f4eee2;--card:#fbf8f1;--ink:#2f2a24;--mute:#70665a;--seg:#e8dfcf;--line:#e6dccb;--acc:#5a4a3a;--ai:#fbf8f1;--hol:#9c4a22;--c1:#5f7f94;--c2:#b5654a;--c3:#7b8a5a;--c4:#d1a03c;--c5:#8a6a86;--c6:#a39887;--t1:#dde6e8;--t2:#f0dcd2;--t3:#e3e7d2;--t4:#f3e6c4;--t5:#eadfe6;--t6:#e9e3d8}
+@media (prefers-color-scheme:dark){:root{--bg:#1c1814;--card:#26211b;--ink:#f0e8da;--mute:#a99d8c;--seg:#2f2921;--line:#352f26;--acc:#e8dcc6;--ai:#1c1814;--hol:#e0a070;--c1:#8fb0c4;--c2:#d98b6a;--c3:#a5b57e;--c4:#e3b85a;--c5:#c39fb6;--c6:#b3a897;--t1:#233039;--t2:#3a2a22;--t3:#2c3322;--t4:#3b3119;--t5:#3a2b37;--t6:#2f2a23}}
 *,*:before,*:after{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.4 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding-bottom:40px;-webkit-tap-highlight-color:transparent;touch-action:manipulation;overscroll-behavior-x:none}
 main{max-width:520px;margin:0 auto;padding:18px 18px 8px;display:flex;flex-direction:column;gap:14px}
@@ -23,14 +23,14 @@ button{cursor:pointer;border:0}button:disabled{opacity:.3}
 .sg{display:flex;background:var(--seg);border-radius:14px;padding:4px;gap:4px}.sg button{flex:1;height:40px;min-height:0;border-radius:11px;background:transparent;color:var(--mute);font:600 14px Inter,system-ui;padding:0}.sg .on{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.15)}
 .cd{background:var(--card);border-radius:24px;padding:12px 10px 8px}
 .wd,.wk{display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}.wd div{text-align:center;font:600 11px Inter,system-ui;color:var(--mute);padding:4px 0 8px}
-.d{grid-row:1;display:flex;flex-direction:column;align-items:center;gap:0;height:38px;cursor:pointer}
+.d{display:flex;flex-direction:column;align-items:center;padding-top:3px;cursor:pointer;position:relative;z-index:1;border-left:1px solid var(--line)}.d:first-child{border-left:0}.wk+.wk{border-top:1px solid var(--line)}
 .d em{font-style:normal;width:32px;height:32px;line-height:32px;border-radius:12px;text-align:center;font-weight:500;font-size:14px}
 .d.t em{background:var(--acc);color:var(--ai)}.d.s em{box-shadow:inset 0 0 0 2px var(--acc)}.d.h em{color:var(--hol);font-weight:700}.d.o em{opacity:.4}
 .dts{display:flex;gap:3px;height:5px}.dts s{width:5px;height:5px;border-radius:50%}
-.br{display:block;height:18px;line-height:18px;font-size:10.5px;font-weight:600;padding:0 5px;margin:0 2px 2px;border-radius:6px;border-left:3px solid var(--c);background:var(--t);color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}.br.ce{margin-right:0;border-radius:6px 0 0 6px}.br.cs{margin-left:0;border-left:0;border-radius:0 6px 6px 0}.br.cs.ce{border-radius:0}
-.k1{--c:var(--c1);--t:var(--t1)}.k2{--c:var(--c2);--t:var(--t2)}.k3{--c:var(--c3);--t:var(--t3)}.k4{--c:var(--c4);--t:var(--t4)}.k5{--c:var(--c5);--t:var(--t5)}
+.br{z-index:2;display:block;height:18px;line-height:18px;font-size:10.5px;font-weight:600;padding:0 5px;margin:0 2px 2px;border-radius:6px;border-left:3px solid var(--c);background:var(--t);background:color-mix(in srgb,var(--c) 28%,var(--card));color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}.br.ce{margin-right:0;border-radius:6px 0 0 6px}.br.cs{margin-left:0;border-left:0;border-radius:0 6px 6px 0}.br.cs.ce{border-radius:0}
+.k1{--c:var(--c1);--t:var(--t1)}.k2{--c:var(--c2);--t:var(--t2)}.k3{--c:var(--c3);--t:var(--t3)}.k4{--c:var(--c4);--t:var(--t4)}.k5{--c:var(--c5);--t:var(--t5)}.k6{--c:var(--c6);--t:var(--t6)}
 .ld{background:var(--c)}
-.lg{display:flex;justify-content:space-between;font:500 11px Inter,system-ui;color:var(--mute);padding:0 2px;white-space:nowrap}.lg .ld{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px}
+.lg{display:flex;justify-content:space-between;font:500 clamp(8.5px,2.7vw,11px) Inter,system-ui;color:var(--mute);padding:0 2px;white-space:nowrap}.lg .ld{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:3px}
 .sh{display:flex;align-items:center}.sh>div{flex:1}.sh b{display:block;font-size:18px}.sh small{color:var(--mute);font-size:12px}.pl{background:var(--acc);color:var(--ai);font-size:24px}
 .ev{display:flex;align-items:center;gap:12px;border-radius:20px;padding:14px 16px;min-height:64px;background:var(--t);cursor:pointer}.ev .ld{width:10px;height:10px;border-radius:50%;flex:none}
 .et{flex:1;min-width:0}.et b{display:block;font-size:15px}.et small{font-size:12px;opacity:.75}.tg{font:600 11px Inter,system-ui;opacity:.75}
@@ -67,7 +67,7 @@ label{display:block;font:500 12px Inter,system-ui;color:var(--mute);margin-top:1
 </div></dialog>
 </main>
 <script>
-const CATS=["Travel","Appointment","Visitors","Holidays","Other"],NAMES=["Kimmy","Hugh","Gwyn"];
+const CATS=["Travel","Appointment","Visitors","Holidays","Work","Other"],NAMES=["Kimmy","Hugh","Gwyn"];
 // Victorian public holidays (source: business.vic.gov.au)
 const HOL={"2026-12-25":"Christmas Day","2026-12-26":"Boxing Day","2026-12-28":"Boxing Day (additional)","2027-01-01":"New Year’s Day","2027-01-26":"Australia Day","2027-03-08":"Labour Day","2027-03-26":"Good Friday","2027-03-27":"Easter Saturday","2027-03-28":"Easter Sunday","2027-03-29":"Easter Monday","2027-04-25":"Anzac Day","2027-06-14":"King’s Birthday"};
 const MIN="2026-11-01",MAX="2027-08-31";
@@ -81,7 +81,7 @@ const clamp=d=>{const s=iso(d);return s<MIN?parse(MIN):s>MAX?parse(MAX):d};
 const fmt=s=>parse(s).toLocaleDateString("en-AU",{weekday:"short",day:"numeric",month:"short"});
 const full=s=>parse(s).toLocaleDateString("en-AU",{weekday:"short",day:"numeric",month:"short",year:"numeric"});
 const esc=s=>String(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const kc=e=>"k"+(CATS.indexOf(e.cat)+1||5);
+const kc=e=>"k"+(CATS.indexOf(e.cat)+1||6);
 const todayIso=iso(new Date());
 let events=[],view="month",cur=clamp(new Date()),sel=iso(cur),editId=null,anim="",pvId=null;
 $("f-cat").innerHTML=CATS.map(c=>`<option>${c}</option>`).join("");
@@ -102,10 +102,10 @@ function weekHTML(ws,cm){
   const days=[...Array(7)].map((_,i)=>iso(addDays(ws,i))),we=days[6];
   const segs=events.filter(e=>e.date<=we&&(e.end_date||e.date)>=days[0]).map(e=>{const end=e.end_date||e.date;return{ev:e,s:e.date<=days[0]?0:days.indexOf(e.date),e:end>=we?6:days.indexOf(end),cs:e.date<days[0],ce:end>we}})
     .sort((a,b)=>a.s-b.s||(b.e-b.s)-(a.e-a.s)||a.ev.id-b.ev.id);
-  const lanes=[];segs.forEach(g=>{let l=lanes.findIndex(x=>x<g.s);if(l<0){l=lanes.length;lanes.push(0)}lanes[l]=g.e;g.lane=l});
+  const lanes=[];segs.forEach(g=>{let l=0;while(lanes[l]&&lanes[l].some(r=>g.s<=r[1]&&g.e>=r[0]))l++;(lanes[l]=lanes[l]||[]).push([g.s,g.e]);g.lane=l});
   return `<div class="wk" style="grid-template-rows:38px repeat(${lanes.length},20px)">`
    +days.map((s,i)=>{const d=addDays(ws,i);
-     return `<div class="d${d.getMonth()!==cm?" o":""}${s===todayIso?" t":""}${HOL[s]?" h":""}" data-d="${s}" style="grid-column:${i+1}"><em>${d.getDate()}</em></div>`}).join("")
+     return `<div class="d${d.getMonth()!==cm?" o":""}${s===todayIso?" t":""}${HOL[s]?" h":""}" data-d="${s}" style="grid-column:${i+1};grid-row:1/${lanes.length+2}"><em>${d.getDate()}</em></div>`}).join("")
    +segs.map(g=>`<div class="br ${kc(g.ev)}${g.cs?" cs":""}${g.ce?" ce":""}" data-id="${g.ev.id}" style="grid-column:${g.s+1}/${g.e+2};grid-row:${g.lane+2}">${esc(g.ev.title)}</div>`).join("")+"</div>"}
 function render(){
   $("ttl").className="mo"+(view==="week"?" sm":"");
@@ -174,7 +174,7 @@ const tip=$("tip");
 function tipHTML(e){return `<b>${esc(e.title)}</b><br>${range(e)}<br>${esc(e.cat)}${NAMES.includes(e.created_by)?" · "+e.created_by:""}${e.notes?`<div style="margin-top:4px;white-space:pre-wrap">${esc(e.notes)}</div>`:""}`}
 function place(x,y){const w=tip.offsetWidth,h=tip.offsetHeight;let l=x+14,t=y+16;if(l+w>innerWidth-8)l=x-w-14;if(t+h>innerHeight-8)t=y-h-14;tip.style.left=Math.max(8,l)+"px";tip.style.top=Math.max(8,t)+"px"}
 if(matchMedia("(hover:hover)").matches){
-  $("view").addEventListener("mouseover",e=>{const b=e.target.closest(".br");if(!b){tip.style.display="none";return}
+  $("view").addEventListener("mouseover",e=>{const b=e.target.closest(".br,.mg");if(!b){tip.style.display="none";return}
     const ev=events.find(x=>String(x.id)===b.dataset.id);if(!ev)return;tip.innerHTML=tipHTML(ev);tip.style.display="block";place(e.clientX,e.clientY)});
   $("view").addEventListener("mousemove",e=>{if(tip.style.display==="block")place(e.clientX,e.clientY)});
   $("view").addEventListener("mouseleave",()=>tip.style.display="none");

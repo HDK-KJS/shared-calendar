@@ -14,7 +14,7 @@ from flask import (Flask, Response, abort, g, jsonify, redirect, request, sessio
 BASE = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.environ.get("CALENDAR_DB", os.path.join(BASE, "data", "calendar.db"))
 SITE_PASSWORD = os.environ.get("SITE_PASSWORD", "")
-CATS = {"Travel", "Appointment", "Visitors", "Holidays", "Other"}
+CATS = {"Travel", "Appointment", "Visitors", "Holidays", "Work", "Other"}
 NAMES = {"Kimmy", "Hugh", "Gwyn"}
 
 app = Flask(__name__, static_folder=None)
